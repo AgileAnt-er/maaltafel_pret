@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Maaltafelpret</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+      <section class="screen screen-games is-active" id="screen-games">
+        <h1>kies je spel.</h1>
+        <div class="game-grid" id="game-grid" aria-label="Spelkeuze"></div>
+      </section>
+
+      <section class="screen screen-tables" id="screen-tables" aria-labelledby="tables-title">
+        <h1 id="tables-title">Kies de maaltafels!</h1>
+        <div class="tables-grid" id="tables-grid" aria-label="Maaltafels"></div>
+        <button class="primary-button" id="tables-ready" type="button" disabled>KLAAR!</button>
+      </section>
+
+      <section class="screen screen-play" id="screen-play" aria-labelledby="play-title">
+        <h1 class="visually-hidden" id="play-title">4 maaltafels op een rij</h1>
+        <div class="score-box" id="score-box">0/5</div>
+        <div class="board-wrap">
+          <div class="board" id="board" aria-label="Speelrooster"></div>
+          <div class="win-line" id="win-line" aria-hidden="true"></div>
+        </div>
+        <form class="answer-bar" id="answer-form">
+          <label for="answer-input">geef hier je antwoord in:</label>
+          <input id="answer-input" name="answer" inputmode="numeric" pattern="[0-9]*" autocomplete="off" type="text">
+          <button class="answer-button" type="submit">OK</button>
+        </form>
+      </section>
+
+      <section class="screen screen-finish" id="screen-finish" aria-labelledby="finish-title">
+        <h1 class="visually-hidden" id="finish-title">Klaar</h1>
+        <button class="icon-button" id="home-button" type="button" aria-label="Terug naar spelkeuze">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 11.5 12 4l9 7.5"></path>
+            <path d="M5.5 10.5V20h13v-9.5"></path>
+            <path d="M9.5 20v-6h5v6"></path>
+          </svg>
+        </button>
+        <button class="icon-button" id="retry-button" type="button" aria-label="Opnieuw spelen">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12a8 8 0 1 0 2.35-5.65"></path>
+            <path d="M4 4v6h6"></path>
+          </svg>
+        </button>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
