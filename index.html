@@ -21,16 +21,30 @@
 
       <section class="screen screen-play" id="screen-play" aria-labelledby="play-title">
         <h1 class="visually-hidden" id="play-title">4 maaltafels op een rij</h1>
+        <button class="back-button" id="back-button" type="button" aria-label="Terug naar spelkeuze">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 6 9 12l6 6"></path>
+          </svg>
+        </button>
         <div class="score-box" id="score-box">0/5</div>
-        <div class="board-wrap">
-          <div class="board" id="board" aria-label="Speelrooster"></div>
-          <div class="win-line" id="win-line" aria-hidden="true"></div>
+        <div class="play-layout">
+          <div class="board-wrap">
+            <div class="board" id="board" aria-label="Speelrooster"></div>
+            <div class="win-line" id="win-line" aria-hidden="true"></div>
+          </div>
+          <aside class="rules-box" aria-label="Spelregels">
+            <h2>Spelregels</h2>
+            <p>Klik een vakje en los de maaltafel op.</p>
+            <p>Groen telt mee. Rood blijft vast.</p>
+            <p>Vier groene vakjes op een rij is een punt.</p>
+          </aside>
         </div>
         <form class="answer-bar" id="answer-form">
           <label for="answer-input">geef hier je antwoord in:</label>
           <input id="answer-input" name="answer" inputmode="numeric" pattern="[0-9]*" autocomplete="off" type="text">
-          <button class="answer-button" type="submit">OK</button>
+          <button class="answer-button" id="answer-button" type="button">OK</button>
         </form>
+        <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
       </section>
 
       <section class="screen screen-finish" id="screen-finish" aria-labelledby="finish-title">

@@ -49,11 +49,13 @@ button:disabled {
 
 .app {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .screen {
   display: none;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: clamp(18px, 4vw, 48px);
 }
 
@@ -69,6 +71,7 @@ button:disabled {
 
 h1 {
   margin: 0 0 clamp(24px, 5vw, 44px);
+  max-width: min(100%, 980px);
   font-size: 5.4rem;
   line-height: 0.95;
   text-align: center;
@@ -78,33 +81,39 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, minmax(160px, 1fr));
   gap: clamp(16px, 3vw, 28px);
-  width: min(980px, 100%);
+  width: min(1080px, 100%);
 }
 
 .game-card {
+  display: grid;
+  place-items: center;
   min-height: 170px;
-  padding: 24px;
+  padding: 16px;
   border: 3px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   box-shadow: var(--shadow);
   color: var(--ink);
-  font-size: 2.05rem;
+  font-size: 1.7rem;
   font-weight: 800;
   line-height: 1.05;
-  text-align: left;
+  text-align: center;
+  overflow-wrap: anywhere;
   transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 .game-card:not(:disabled):hover,
 .game-card:not(:disabled):focus-visible {
   background: var(--yellow);
+  border-color: #0f172a;
   box-shadow: 0 18px 34px rgba(23, 33, 43, 0.2);
   transform: translateY(-4px);
 }
 
 .game-card:disabled {
-  background: #e9edf0;
+  border-style: dashed;
+  background: #eef1f4;
+  box-shadow: none;
   color: #69747d;
   opacity: 0.72;
 }
@@ -139,6 +148,7 @@ h1 {
 
 .table-option.is-selected {
   background: var(--blue-dark);
+  box-shadow: inset 0 0 0 5px #ffffff;
   color: #ffffff;
 }
 
@@ -157,6 +167,7 @@ h1 {
 .primary-button:not(:disabled):hover,
 .primary-button:not(:disabled):focus-visible {
   background: var(--mint);
+  box-shadow: 0 10px 18px rgba(23, 33, 43, 0.16);
   transform: translateY(-2px);
 }
 
@@ -170,14 +181,14 @@ h1 {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(18px, 4vh, 34px);
+  gap: 22px;
   padding-top: 84px;
 }
 
 .score-box {
   position: absolute;
   top: clamp(16px, 3vw, 28px);
-  left: clamp(16px, 3vw, 28px);
+  right: clamp(16px, 3vw, 28px);
   min-width: 94px;
   padding: 10px 16px;
   border: 2px solid var(--line);
@@ -187,10 +198,50 @@ h1 {
   text-align: center;
 }
 
+.back-button {
+  position: absolute;
+  top: clamp(16px, 3vw, 28px);
+  left: clamp(16px, 3vw, 28px);
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 2px solid var(--line);
+  background: #ffffff;
+  color: #111111;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  background: var(--yellow);
+  transform: translateY(-2px);
+}
+
+.back-button svg {
+  width: 42px;
+  height: 42px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.play-layout {
+  display: grid;
+  grid-template-columns: minmax(340px, 620px) minmax(190px, 260px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 4vw, 44px);
+  width: min(1120px, 100%);
+}
+
 .board-wrap {
   position: relative;
-  width: min(78vh, 92vw, 620px);
+  width: min(68vh, 100%, 620px);
   aspect-ratio: 1;
+  justify-self: end;
 }
 
 .board {
@@ -201,12 +252,15 @@ h1 {
   border-top: 3px solid var(--line);
   border-left: 3px solid var(--line);
   background: #ffffff;
+  box-shadow: var(--shadow);
 }
 
 .cell {
   position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
   min-height: 0;
   padding: 6px;
@@ -220,6 +274,12 @@ h1 {
   line-height: 1.05;
   text-align: center;
   overflow-wrap: anywhere;
+}
+
+.cell-answer {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.82em;
 }
 
 .cell:hover,
@@ -264,6 +324,34 @@ h1 {
   display: block;
 }
 
+.rules-box {
+  align-self: stretch;
+  max-height: 620px;
+  padding: 20px;
+  border: 3px solid var(--line);
+  border-radius: 8px;
+  background: var(--yellow);
+  box-shadow: var(--shadow);
+  color: #111111;
+}
+
+.rules-box h2 {
+  margin: 0 0 16px;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.rules-box p {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.rules-box p:last-child {
+  margin-bottom: 0;
+}
+
 .answer-bar {
   display: flex;
   align-items: center;
@@ -294,6 +382,44 @@ h1 {
   border: 2px solid var(--line);
   background: var(--yellow);
   font-weight: 900;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.answer-button:hover,
+.answer-button:focus-visible {
+  background: var(--mint);
+  transform: translateY(-2px);
+}
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -24px;
+  left: var(--confetti-x, 50%);
+  width: 12px;
+  height: 18px;
+  background: var(--confetti-color, var(--yellow));
+  transform: rotate(var(--confetti-rotate, 0deg));
+  animation: confetti-fall 3000ms linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(-24px) rotate(var(--confetti-rotate, 0deg));
+  }
+
+  100% {
+    opacity: 0.85;
+    transform: translateY(110vh) rotate(calc(var(--confetti-rotate, 0deg) + 540deg));
+  }
 }
 
 .screen-finish {
@@ -363,12 +489,45 @@ h1 {
   }
 
   .screen-play {
+    gap: 14px;
     justify-content: flex-start;
-    padding-top: 92px;
+    padding-top: 98px;
+  }
+
+  .score-box {
+    font-size: 1.45rem;
+  }
+
+  .back-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .play-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .board-wrap {
     width: min(92vw, 520px);
+    justify-self: center;
+  }
+
+  .rules-box {
+    order: -1;
+    width: min(92vw, 520px);
+    justify-self: center;
+    padding: 14px;
+  }
+
+  .rules-box h2 {
+    font-size: 1.35rem;
+    margin-bottom: 8px;
+  }
+
+  .rules-box p {
+    margin-bottom: 6px;
+    font-size: 1rem;
   }
 
   .table-option {
@@ -380,8 +539,7 @@ h1 {
   }
 
   .answer-bar label,
-  .answer-bar input,
-  .score-box {
+  .answer-bar input {
     font-size: 1.45rem;
   }
 }
@@ -410,6 +568,21 @@ h1 {
 
   .cell {
     font-size: 1rem;
+  }
+
+  .score-box {
+    min-width: 76px;
+    padding: 8px 10px;
+  }
+
+  .back-button {
+    width: 52px;
+    height: 52px;
+  }
+
+  .back-button svg {
+    width: 34px;
+    height: 34px;
   }
 
   .answer-bar {

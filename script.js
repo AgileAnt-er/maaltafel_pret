@@ -3,6 +3,8 @@
 
   var boardSize = 5;
   var targetScore = 5;
+  var multiplierMax = 10;
+  var confettiDuration = 3000;
   var games = [
     { id: "maze", name: "maaltafeldoolhof", enabled: false },
     { id: "bros", name: "maaltafel bros", enabled: false },
@@ -23,7 +25,10 @@
   var scoreBox = document.getElementById("score-box");
   var answerForm = document.getElementById("answer-form");
   var answerInput = document.getElementById("answer-input");
+  var answerButton = document.getElementById("answer-button");
+  var backButton = document.getElementById("back-button");
   var winLine = document.getElementById("win-line");
+  var confettiLayer = document.getElementById("confetti-layer");
   var homeButton = document.getElementById("home-button");
   var retryButton = document.getElementById("retry-button");
 
@@ -32,6 +37,8 @@
   var score = 0;
   var activeCell = null;
   var isResetting = false;
+  var recentProblemKeys = [];
+  var confettiTimer = null;
 
   function showScreen(name) {
     Object.keys(screens).forEach(function (screenName) {
@@ -100,12 +107,16 @@
     return {
       problem: "",
       answer: null,
-      state: "empty"
+      key: "",
+      state: "empty",
+      showAnswer: false
     };
   }
 
   function startGame() {
     score = 0;
+    recentProblemKeys = [];
+    stopConfetti();
     resetBoard();
     updateScore();
     showScreen("play");
@@ -132,8 +143,8 @@
       var button = document.createElement("button");
       button.className = "cell";
       button.type = "button";
-      button.textContent = cell.problem;
       button.dataset.index = String(index);
+      renderCellContent(button, cell);
 
       if (index === activeCell) {
         button.classList.add("is-active");
@@ -147,7 +158,7 @@
         button.classList.add("is-wrong");
       }
 
-      if (cell.state === "correct" || isResetting) {
+      if (cell.state === "correct" || cell.state === "wrong" || isResetting) {
         button.disabled = true;
       }
 
@@ -159,10 +170,31 @@
     });
   }
 
-  function chooseCell(index) {
-    if (isResetting || board[index].state === "correct") {
+  function renderCellContent(button, cell) {
+    button.textContent = "";
+
+    if (!cell.problem) {
       return;
     }
+
+    var problemText = document.createElement("span");
+    problemText.textContent = cell.problem;
+    button.appendChild(problemText);
+
+    if (cell.state === "wrong" && cell.showAnswer) {
+      var answerText = document.createElement("span");
+      answerText.className = "cell-answer";
+      answerText.textContent = "= " + cell.answer;
+      button.appendChild(answerText);
+    }
+  }
+
+  function chooseCell(index) {
+    if (isResetting || board[index].state === "correct" || board[index].state === "wrong") {
+      return;
+    }
+
+    hideWrongAnswers();
 
     if (!board[index].problem) {
       board[index] = createProblemCell();
@@ -175,14 +207,74 @@
   }
 
   function createProblemCell() {
-    var table = selectedTables[Math.floor(Math.random() * selectedTables.length)];
-    var multiplier = Math.floor(Math.random() * 12) + 1;
+    var problem = pickProblem();
 
     return {
-      problem: table + " x " + multiplier,
-      answer: table * multiplier,
-      state: "open"
+      problem: problem.table + " x " + problem.multiplier,
+      answer: problem.table * problem.multiplier,
+      key: problem.key,
+      state: "open",
+      showAnswer: false
     };
+  }
+
+  function pickProblem() {
+    var table = selectedTables[Math.floor(Math.random() * selectedTables.length)];
+    var multiplier = Math.floor(Math.random() * multiplierMax) + 1;
+    var problem = {
+      table: table,
+      multiplier: multiplier,
+      key: table + "x" + multiplier
+    };
+
+    if (wouldBeThirdRepeat(problem.key)) {
+      problem = pickDifferentProblem(problem.key);
+    }
+
+    rememberProblem(problem.key);
+    return problem;
+  }
+
+  function pickDifferentProblem(blockedKey) {
+    var options = [];
+
+    selectedTables.forEach(function (table) {
+      for (var multiplier = 1; multiplier <= multiplierMax; multiplier += 1) {
+        var key = table + "x" + multiplier;
+
+        if (key !== blockedKey) {
+          options.push({
+            table: table,
+            multiplier: multiplier,
+            key: key
+          });
+        }
+      }
+    });
+
+    return options[Math.floor(Math.random() * options.length)];
+  }
+
+  function wouldBeThirdRepeat(key) {
+    return recentProblemKeys.length >= 2 &&
+      recentProblemKeys[recentProblemKeys.length - 1] === key &&
+      recentProblemKeys[recentProblemKeys.length - 2] === key;
+  }
+
+  function rememberProblem(key) {
+    recentProblemKeys.push(key);
+
+    if (recentProblemKeys.length > 2) {
+      recentProblemKeys.shift();
+    }
+  }
+
+  function hideWrongAnswers() {
+    board.forEach(function (cell) {
+      if (cell.state === "wrong") {
+        cell.showAnswer = false;
+      }
+    });
   }
 
   function submitAnswer(event) {
@@ -206,6 +298,8 @@
       checkWin();
     } else {
       board[activeCell].state = "wrong";
+      board[activeCell].showAnswer = true;
+      activeCell = null;
       answerInput.value = "";
       renderBoard();
       answerInput.focus();
@@ -222,6 +316,7 @@
     score += 1;
     updateScore();
     showWinLine(winningLine);
+    startConfetti();
 
     isResetting = true;
     renderBoard();
@@ -232,7 +327,7 @@
       } else {
         resetBoard();
       }
-    }, 850);
+    }, confettiDuration);
   }
 
   function updateScore() {
@@ -306,6 +401,35 @@
     winLine.classList.remove("is-visible");
   }
 
+  function startConfetti() {
+    var colors = ["#f7c948", "#6ee7b7", "#3b82f6", "#fb7185", "#32c66b", "#ffffff"];
+
+    stopConfetti();
+
+    for (var index = 0; index < 90; index += 1) {
+      var piece = document.createElement("span");
+      piece.className = "confetti-piece";
+      piece.style.setProperty("--confetti-x", Math.floor(Math.random() * 100) + "%");
+      piece.style.setProperty("--confetti-rotate", Math.floor(Math.random() * 360) + "deg");
+      piece.style.setProperty("--confetti-color", colors[index % colors.length]);
+      piece.style.animationDelay = Math.floor(Math.random() * 550) + "ms";
+      piece.style.width = (8 + Math.floor(Math.random() * 8)) + "px";
+      piece.style.height = (10 + Math.floor(Math.random() * 12)) + "px";
+      confettiLayer.appendChild(piece);
+    }
+
+    confettiTimer = window.setTimeout(stopConfetti, confettiDuration);
+  }
+
+  function stopConfetti() {
+    if (confettiTimer) {
+      window.clearTimeout(confettiTimer);
+      confettiTimer = null;
+    }
+
+    confettiLayer.innerHTML = "";
+  }
+
   function indexToCenter(index) {
     var row = Math.floor(index / boardSize);
     var col = index % boardSize;
@@ -317,7 +441,11 @@
   }
 
   function goHome() {
+    stopConfetti();
     selectedTables = [];
+    score = 0;
+    activeCell = null;
+    isResetting = false;
     readyButton.disabled = true;
     Array.prototype.forEach.call(tablesGrid.children, function (button) {
       button.classList.remove("is-selected");
@@ -328,12 +456,15 @@
 
   function retry() {
     score = 0;
+    stopConfetti();
     resetBoard();
     showScreen("tables");
   }
 
   readyButton.addEventListener("click", startGame);
   answerForm.addEventListener("submit", submitAnswer);
+  answerButton.addEventListener("click", submitAnswer);
+  backButton.addEventListener("click", goHome);
   homeButton.addEventListener("click", goHome);
   retryButton.addEventListener("click", retry);
 
