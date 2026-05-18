@@ -53,10 +53,12 @@ button:disabled {
 }
 
 .screen {
+  position: relative;
   display: none;
   min-height: 100vh;
   min-height: 100dvh;
   padding: clamp(18px, 4vw, 48px);
+  padding-bottom: clamp(64px, 9vh, 82px);
 }
 
 .screen.is-active {
@@ -74,6 +76,19 @@ h1 {
   max-width: min(100%, 980px);
   font-size: 5.4rem;
   line-height: 0.95;
+  text-align: center;
+}
+
+.credit {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  left: 18px;
+  margin: 0;
+  color: rgba(23, 33, 43, 0.76);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
   text-align: center;
 }
 

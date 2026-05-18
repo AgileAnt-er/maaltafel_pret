@@ -47,4 +47,5 @@ Het vierde scherm:
 - Druk je op het andere knopje kan je de maaltafels die je wilt oefenen terug kiezen en daarna kan je het spel nog eens spelen
 
 
-
+Algemeen
+- Onderaan elk scherm, voeg toe: Gemaakt door Bente, met de hulp van Flore
