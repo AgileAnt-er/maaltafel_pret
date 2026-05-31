@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Maaltafelpret</title>
     <link rel="stylesheet" href="style.css">
+    <script data-goatcounter="https://maaltafelpret.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   </head>
   <body>
     <main class="app" aria-live="polite">
       <section class="screen screen-games is-active" id="screen-games">
         <h1>kies je spel.</h1>
         <div class="game-grid" id="game-grid" aria-label="Spelkeuze"></div>
-        <p class="credit">Gemaakt door Bente, met de hulp van Flore</p>
+        <p class="credit">Gemaakt door Bente en Flore</p>
       </section>
 
       <section class="screen screen-tables" id="screen-tables" aria-labelledby="tables-title">
         <h1 id="tables-title">Kies de maaltafels!</h1>
         <div class="tables-grid" id="tables-grid" aria-label="Maaltafels"></div>
         <button class="primary-button" id="tables-ready" type="button" disabled>KLAAR!</button>
-        <p class="credit">Gemaakt door Bente, met de hulp van Flore</p>
+        <p class="credit">Gemaakt door Bente en Flore</p>
       </section>
 
       <section class="screen screen-play" id="screen-play" aria-labelledby="play-title">
@@ -47,7 +48,91 @@
           <button class="answer-button" id="answer-button" type="button">OK</button>
         </form>
         <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
-        <p class="credit">Gemaakt door Bente, met de hulp van Flore</p>
+        <p class="credit">Gemaakt door Bente en Flore</p>
+      </section>
+
+      <section class="screen screen-maze" id="screen-maze" aria-labelledby="maze-title">
+        <h1 class="visually-hidden" id="maze-title">Maaltafeldoolhof</h1>
+        <button class="back-button" id="maze-back-button" type="button" aria-label="Terug naar spelkeuze">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 6 9 12l6 6"></path>
+          </svg>
+        </button>
+        <div class="maze-layout">
+          <div class="maze-board" id="maze-board" aria-label="Maaltafeldoolhof"></div>
+          <div class="maze-controls" aria-label="Doolhofbesturing">
+            <button class="maze-arrow maze-arrow-up" type="button" data-direction="top" aria-label="Naar boven">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="m6 11 6-6 6 6"></path></svg>
+            </button>
+            <button class="maze-arrow maze-arrow-left" type="button" data-direction="left" aria-label="Naar links">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"></path><path d="m11 6-6 6 6 6"></path></svg>
+            </button>
+            <button class="maze-arrow maze-arrow-right" type="button" data-direction="right" aria-label="Naar rechts">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+            </button>
+            <button class="maze-arrow maze-arrow-down" type="button" data-direction="bottom" aria-label="Naar beneden">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"></path><path d="m18 13-6 6-6-6"></path></svg>
+            </button>
+          </div>
+          <aside class="rules-box maze-rules" aria-label="Spelregels maaltafeldoolhof">
+            <h2>Spelregels</h2>
+            <p>Gebruik de pijltjes om door het doolhof te gaan.</p>
+            <p>Kom je op geel? Los de maaltafel op.</p>
+            <p>Fout antwoord? Dan ga je terug naar de start.</p>
+            <p>Bereik het paarse vakje om te winnen.</p>
+          </aside>
+        </div>
+        <form class="answer-bar maze-answer" id="maze-answer-form">
+          <label for="maze-answer-input">geef hier je antwoord in:</label>
+          <input id="maze-answer-input" name="maze-answer" inputmode="numeric" pattern="[0-9]*" autocomplete="off" type="text">
+          <button class="answer-button" id="maze-answer-button" type="button">OK</button>
+        </form>
+        <p class="maze-message" id="maze-message" aria-live="polite"></p>
+        <p class="credit">Gemaakt door Bente en Flore</p>
+      </section>
+
+      <section class="screen screen-lego" id="screen-lego" aria-labelledby="lego-title">
+        <h1 class="visually-hidden" id="lego-title">Maaltafel Lego</h1>
+        <button class="back-button" id="lego-back-button" type="button" aria-label="Terug naar spelkeuze">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 6 9 12l6 6"></path>
+          </svg>
+        </button>
+        <div class="lego-layout">
+          <div class="lego-board-area">
+            <div class="lego-board" id="lego-board" aria-label="Lego bouwplaat"></div>
+          </div>
+          <aside class="rules-box lego-rules" aria-label="Speluitleg maaltafel Lego">
+            <h2>Speluitleg</h2>
+            <p>Kies een blokje en los de maaltafel op.</p>
+            <p>Goed? Sleep het blokje naar de bouwplaat.</p>
+            <p>De draaiknop draait alleen het volgende blokje dat je sleept.</p>
+            <p>Leg je een blokje over een ander blokje? Dan verdwijnt het oude blokje.</p>
+          </aside>
+          <div class="lego-bottom-panel">
+            <div class="lego-picker" id="lego-picker" aria-label="Legoblokjes"></div>
+            <div class="lego-controls" aria-label="Lego bediening">
+              <div class="lego-zoom" aria-label="Bouwplaat groter of kleiner">
+                <button class="lego-tool-button" id="lego-zoom-out" type="button" aria-label="Bouwplaat kleiner">-</button>
+                <button class="lego-tool-button" id="lego-zoom-in" type="button" aria-label="Bouwplaat groter">+</button>
+              </div>
+              <div class="lego-colors" id="lego-colors" aria-label="Kleurenkiezer"></div>
+              <button class="lego-tool-button lego-rotate" id="lego-rotate" type="button" aria-label="Blokje draaien">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 12a8 8 0 1 0 2.35-5.65"></path>
+                  <path d="M4 4v6h6"></path>
+                </svg>
+              </button>
+              <form class="lego-answer" id="lego-answer-form">
+                <label for="lego-answer-input">antwoord:</label>
+                <input id="lego-answer-input" name="lego-answer" inputmode="numeric" pattern="[0-9]*" autocomplete="off" type="text">
+                <button class="answer-button" id="lego-answer-button" type="button">OK</button>
+              </form>
+              <p class="lego-message" id="lego-message" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+        <p class="credit">Gemaakt door Bente en Flore</p>
       </section>
 
       <section class="screen screen-finish" id="screen-finish" aria-labelledby="finish-title">
@@ -65,7 +150,7 @@
             <path d="M4 4v6h6"></path>
           </svg>
         </button>
-        <p class="credit">Gemaakt door Bente, met de hulp van Flore</p>
+        <p class="credit">Gemaakt door Bente en Flore</p>
       </section>
     </main>
 

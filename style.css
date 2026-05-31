@@ -94,9 +94,9 @@ h1 {
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
   gap: clamp(16px, 3vw, 28px);
-  width: min(1080px, 100%);
+  width: min(780px, 100%);
 }
 
 .game-card {
@@ -198,6 +198,24 @@ h1 {
   justify-content: center;
   gap: 22px;
   padding-top: 84px;
+}
+
+.screen-maze {
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 104px;
+}
+
+.screen-lego {
+  --lego-cell: 22px;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 82px;
 }
 
 .score-box {
@@ -367,6 +385,441 @@ h1 {
   margin-bottom: 0;
 }
 
+.maze-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 640px) minmax(110px, 140px) minmax(210px, 260px);
+  grid-template-areas: "maze controls rules";
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 34px);
+  width: min(1060px, 100%);
+}
+
+.maze-board {
+  --maze-cols: 8;
+  --maze-rows: 6;
+  grid-area: maze;
+  display: grid;
+  grid-template-columns: repeat(var(--maze-cols), 1fr);
+  width: min(calc(58vh * 1.333), 100%, 640px);
+  aspect-ratio: 8 / 6;
+  background: #f8fafc;
+  box-shadow: var(--shadow);
+}
+
+.maze-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  background: #f8fafc;
+}
+
+.maze-cell.is-yellow {
+  background: #fde68a;
+}
+
+.maze-cell.is-start {
+  background-image: linear-gradient(rgba(110, 231, 183, 0.3), rgba(110, 231, 183, 0.3));
+}
+
+.maze-cell.is-exit {
+  background: #8b5cf6;
+}
+
+.maze-pawn {
+  z-index: 3;
+  width: min(54%, 40px);
+  aspect-ratio: 1;
+  border: 3px solid #0f3b8f;
+  border-radius: 50%;
+  background: #2563eb;
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.3), 0 5px 10px rgba(15, 23, 42, 0.22);
+}
+
+.maze-problem-label {
+  position: absolute;
+  z-index: 2;
+  max-width: 92%;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #111111;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.maze-controls {
+  grid-area: controls;
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 10px;
+  justify-content: center;
+}
+
+.maze-arrow {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111111;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.maze-arrow:hover,
+.maze-arrow:focus-visible {
+  background: var(--yellow);
+  transform: translateY(-2px);
+}
+
+.maze-arrow:disabled {
+  opacity: 0.45;
+}
+
+.maze-arrow svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.maze-arrow-up {
+  grid-area: up;
+}
+
+.maze-arrow-left {
+  grid-area: left;
+}
+
+.maze-arrow-right {
+  grid-area: right;
+}
+
+.maze-arrow-down {
+  grid-area: down;
+}
+
+.maze-rules {
+  grid-area: rules;
+}
+
+.maze-answer {
+  margin-top: 0;
+}
+
+.maze-message {
+  min-height: 36px;
+  margin: 0;
+  padding: 8px 14px;
+  border: 2px solid rgba(17, 17, 17, 0.35);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.lego-layout {
+  display: grid;
+  grid-template-columns: minmax(560px, 1fr) minmax(220px, 280px);
+  grid-template-areas:
+    "board rules"
+    "bottom bottom";
+  align-items: start;
+  justify-content: center;
+  gap: 18px 28px;
+  width: min(1180px, 100%);
+}
+
+.lego-board-area {
+  grid-area: board;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.lego-board {
+  --lego-cols: 20;
+  --lego-rows: 14;
+  --lego-ratio: 1.428571;
+  position: relative;
+  width: min(calc(50vh * var(--lego-ratio)), 100%, 760px);
+  aspect-ratio: var(--lego-cols) / var(--lego-rows);
+  border: 4px solid #14532d;
+  border-radius: 8px;
+  background-color: #36b66b;
+  background-image:
+    radial-gradient(circle, rgba(10, 95, 44, 0.42) 0 30%, rgba(255, 255, 255, 0.18) 31% 42%, transparent 43%),
+    linear-gradient(rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0));
+  background-position: 0 0;
+  background-size: calc(100% / var(--lego-cols)) calc(100% / var(--lego-rows)), 100% 100%;
+  box-shadow: var(--shadow);
+  touch-action: none;
+  overflow: hidden;
+}
+
+.lego-rules {
+  grid-area: rules;
+  min-height: 100%;
+}
+
+.lego-bottom-panel {
+  grid-area: bottom;
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) minmax(320px, 420px);
+  align-items: start;
+  gap: 18px;
+}
+
+.lego-picker {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  justify-content: start;
+}
+
+.lego-picker-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lego-picker-brick,
+.lego-placed-brick,
+.lego-drag-ghost {
+  position: relative;
+  border: 3px solid rgba(0, 0, 0, 0.72);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+    inset 0 7px 0 rgba(255, 255, 255, 0.2);
+}
+
+.lego-picker-brick {
+  display: grid;
+  grid-template-columns: repeat(var(--brick-w), 1fr);
+  grid-template-rows: repeat(var(--brick-h), 1fr);
+  place-items: center;
+  width: calc(var(--lego-cell) * var(--brick-w));
+  height: calc(var(--lego-cell) * var(--brick-h));
+  min-width: 0;
+  min-height: 0;
+  padding: max(3px, calc(var(--lego-cell) * 0.1));
+  color: #111111;
+  font-size: 0.82rem;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  touch-action: none;
+  transition: box-shadow 140ms ease, transform 140ms ease;
+}
+
+.lego-picker-brick:hover,
+.lego-picker-brick:focus-visible,
+.lego-picker-brick.is-selected {
+  box-shadow:
+    0 0 0 5px var(--blue),
+    inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+    inset 0 7px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.lego-picker-brick.is-ready {
+  box-shadow:
+    0 0 0 5px var(--mint),
+    inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+    inset 0 7px 0 rgba(255, 255, 255, 0.2);
+}
+
+.lego-picker-brick.is-wrong {
+  box-shadow:
+    0 0 0 5px var(--red),
+    inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+    inset 0 7px 0 rgba(255, 255, 255, 0.2);
+}
+
+.lego-brick-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  max-width: max-content;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.68);
+  transform: translate(-50%, -50%);
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.lego-stud {
+  align-self: start;
+  justify-self: center;
+  width: min(14px, 58%);
+  aspect-ratio: 1;
+  border: 2px solid rgba(0, 0, 0, 0.22);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.16);
+}
+
+.lego-placed-brick {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(var(--brick-w), 1fr);
+  grid-template-rows: repeat(var(--brick-h), 1fr);
+  gap: 3px;
+  padding: 5px;
+  z-index: 2;
+}
+
+.lego-preview-brick {
+  z-index: 3;
+  opacity: 0.55;
+  outline: 4px solid #ffffff;
+  outline-offset: -6px;
+  pointer-events: none;
+}
+
+.lego-drag-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(var(--brick-w), 1fr);
+  grid-template-rows: repeat(var(--brick-h), 1fr);
+  gap: 3px;
+  padding: 5px;
+  pointer-events: none;
+  opacity: 0.88;
+}
+
+.lego-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "zoom colors rotate"
+    "answer answer answer"
+    "message message message";
+  gap: 9px;
+  align-items: start;
+}
+
+.lego-zoom {
+  grid-area: zoom;
+  display: flex;
+  gap: 8px;
+}
+
+.lego-tool-button {
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 48px;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 2rem;
+  font-weight: 900;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.lego-tool-button:hover,
+.lego-tool-button:focus-visible {
+  background: var(--yellow);
+  transform: translateY(-2px);
+}
+
+.lego-rotate {
+  grid-area: rotate;
+}
+
+.lego-rotate.is-vertical {
+  background: var(--mint);
+}
+
+.lego-rotate svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lego-colors {
+  grid-area: colors;
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  gap: 6px;
+  justify-content: center;
+}
+
+.lego-color {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--line);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.28);
+}
+
+.lego-color.is-selected {
+  outline: 5px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.lego-answer {
+  grid-area: answer;
+  display: grid;
+  grid-template-columns: auto minmax(110px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.lego-answer label {
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.lego-answer input {
+  min-height: 48px;
+  min-width: 0;
+  border: 2px solid var(--line);
+  background: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.lego-message {
+  grid-area: message;
+  min-height: 38px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 2px solid rgba(17, 17, 17, 0.35);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.74);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
 .answer-bar {
   display: flex;
   align-items: center;
@@ -509,6 +962,21 @@ h1 {
     padding-top: 98px;
   }
 
+  .screen-play .credit {
+    position: static;
+    margin-top: 14px;
+  }
+
+  .screen-maze {
+    justify-content: flex-start;
+    padding-top: 92px;
+  }
+
+  .screen-maze .credit {
+    position: static;
+    margin-top: 14px;
+  }
+
   .score-box {
     font-size: 1.45rem;
   }
@@ -521,6 +989,24 @@ h1 {
   .play-layout {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .maze-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "rules"
+      "maze"
+      "controls";
+    gap: 14px;
+  }
+
+  .maze-board {
+    width: min(92vw, 620px);
+    justify-self: center;
+  }
+
+  .maze-controls {
+    justify-self: center;
   }
 
   .board-wrap {
@@ -557,6 +1043,47 @@ h1 {
   .answer-bar input {
     font-size: 1.45rem;
   }
+
+  .screen-lego {
+    justify-content: flex-start;
+    padding-top: 92px;
+  }
+
+  .screen-lego .credit {
+    position: static;
+    margin-top: 14px;
+  }
+
+  .lego-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "rules"
+      "board"
+      "bottom";
+    gap: 14px;
+  }
+
+  .lego-board {
+    width: min(84vw, 520px);
+  }
+
+  .lego-bottom-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .lego-picker {
+    justify-content: center;
+  }
+
+  .lego-picker-row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .lego-controls {
+    justify-self: center;
+    width: min(92vw, 420px);
+  }
 }
 
 @media (max-width: 430px) {
@@ -566,6 +1093,18 @@ h1 {
 
   .screen {
     padding: 16px;
+  }
+
+  .screen-play {
+    padding-top: 88px;
+  }
+
+  .screen-maze {
+    padding-top: 88px;
+  }
+
+  .screen-lego {
+    padding-top: 88px;
   }
 
   .tables-grid {
@@ -607,6 +1146,33 @@ h1 {
 
   .answer-bar input,
   .answer-button {
+    width: 100%;
+  }
+
+  .maze-controls {
+    grid-template-columns: repeat(3, 48px);
+    gap: 8px;
+  }
+
+  .maze-arrow {
+    width: 48px;
+    height: 48px;
+  }
+
+  .lego-picker {
+    width: 100%;
+  }
+
+  .lego-controls,
+  .lego-answer {
+    grid-template-columns: 1fr;
+  }
+
+  .lego-colors {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .lego-color {
     width: 100%;
   }
 }
