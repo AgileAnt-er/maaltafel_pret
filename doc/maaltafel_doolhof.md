@@ -13,3 +13,7 @@ Er is een groot rooster van lichtgrijze lijnen, de randen en muren in het doolho
 - In het rooster zijn sommige vakjes geel als je hierop komt verschijnt er een maaltafel 
 - Het antwoord kan je dan ingeven in een vakje beneden als het juist is gebeurt er niets, anders ga je naar het begin
 - Als je op het paarse vakje komt ga je naar scherm 4
+
+Verbeteringen:
+- De maaltafel moet je kunnen zien
+- Het doolhof moet moeilijker zijn
